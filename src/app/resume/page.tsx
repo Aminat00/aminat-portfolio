@@ -1,15 +1,6 @@
 "use client";
 
-import {
-	FaHtml5,
-	FaCss3,
-	FaJs,
-	FaReact,
-	FaFigma,
-	FaNodeJs,
-	FaPython,
-	FaGithub,
-} from "react-icons/fa";
+import { FaJs, FaReact, FaNodeJs, FaPython, FaGithub } from "react-icons/fa";
 import { HiMiniArrowTopRightOnSquare } from "react-icons/hi2";
 
 import {

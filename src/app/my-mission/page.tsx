@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
-
 import { motion } from "framer-motion";
-import { FaGem, FaHandsHelping, FaHeart } from "react-icons/fa";
+
 const staggerContainer = {
 	hidden: { opacity: 0 },
 	visible: {
@@ -85,8 +84,8 @@ const Services = () => {
 					<motion.p
 						variants={fadeUp}
 						className="text-2xl  leading-relaxed font-bold">
-						<strong>I seek Allah's [God's] boundless love</strong> through
-						uplifting the Ummah [Humanity] with <br />
+						<strong>I seek Allah&apos;s [God&apos;s] boundless love</strong>{" "}
+						through uplifting the Ummah [Humanity] with <br />
 						<span className="text-accent">innovative digital products 💻</span>
 					</motion.p>
 
@@ -107,7 +106,8 @@ const Services = () => {
 							<em>“The best of you are those who are beneficial to others.”</em>{" "}
 							<br />
 							<strong>
-								I enjoy working on challenges that make people's lives easier.
+								I enjoy working on challenges that make people&apos;s lives
+								easier.
 							</strong>
 						</p>
 					</motion.div>
@@ -117,7 +117,7 @@ const Services = () => {
 						className="bg-red-100 p-4 rounded-lg text-center my-4"
 						variants={blockAnimation}>
 						<p className="text-2xl font-bold text-green-800 mb-2">
-							"No pressure, no diamond"
+							&quot; No pressure, no diamond &quot;
 						</p>
 						<p className="text-xl text-primary">
 							I understand that success is not possible without hard work, and I

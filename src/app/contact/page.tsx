@@ -1,8 +1,6 @@
 "use client";
 import { Button, Input, Textarea } from "@/components/";
-import { FaEnvelope, FaMapMarkerAlt, FaWhatsapp } from "react-icons/fa";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import { FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 const info = [
 	{
@@ -26,7 +24,6 @@ import { motion } from "framer-motion";
 import React from "react";
 
 const Contact = () => {
-	const [submitted, setSubmitted] = React.useState(false);
 	const [errors, setErrors] = React.useState<FormErrors>({});
 	const [formData, setFormData] = React.useState({
 		firstName: "",
@@ -112,7 +109,6 @@ const Contact = () => {
 			console.log("Response received");
 			if (res.status === 200) {
 				console.log("Response succeeded!");
-				setSubmitted(true);
 				setFormData({
 					firstName: "",
 					lastName: "",
@@ -138,7 +134,11 @@ const Contact = () => {
 					{/* form */}
 					<div className="xl:w-[54%] order-2 xl:order-none">
 						<form className="flex flex-col gap-6 p-10 bg-[#27272c] rounded-xl">
-							<h3 className="text-4xl text-accent">Let's work together</h3>
+							<h3 className="text-4xl text-accent">
+								<h3 className="text-4xl text-accent">
+									Let&apos;s work together
+								</h3>
+							</h3>
 							<p className="text-white/60">
 								I’m always open to new challenges and eager to contribute to
 								projects that benefit humaity 🚀. Let’s work together to create

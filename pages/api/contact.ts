@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import nodemailer from "nodemailer";
+import nodemailer, { SentMessageInfo } from "nodemailer";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -24,9 +24,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 		html: `<div>${req.body.message}</div><p>Sent from:
         ${req.body.email}</p> <p>${req.body.phoneNumber}</p>`,
 	};
-	transporter.sendMail(mailData, function (err: any, info: any) {
-		if (err) console.log(err);
-		else console.log(info);
-	});
+	transporter.sendMail(
+		mailData,
+		function (err: Error | null, info: SentMessageInfo) {
+			if (err) console.log(err);
+			else console.log(info);
+		}
+	);
 	res.status(200);
 }

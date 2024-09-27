@@ -10,7 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-	title: "Aminat Moldalieva's portfolio",
+	title: "Aminat Moldalieva",
 	description: "The personal website of Aminat Moldalieva",
 };
 

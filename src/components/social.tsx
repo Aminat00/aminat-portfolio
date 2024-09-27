@@ -8,8 +8,6 @@ const socials = [
 		icon: <FaLinkedinIn />,
 		path: "https://www.linkedin.com/in/aminatmoldalieva/",
 	},
-	{ icon: <FaYoutube />, path: "" },
-	{ icon: <FaTwitter />, path: "" },
 ];
 
 export const Social = ({

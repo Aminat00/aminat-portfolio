@@ -283,7 +283,7 @@ const Resume = () => {
 								<p className="max-w-[600px] text-white/60 mx-auto xl:mx-0">
 									{education.description}
 								</p>
-								<ScrollArea className="h-[400px]">
+								<ScrollArea className="h-[400px] overflow-y-auto">
 									<ul className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
 										{education.items.map((item, index) => {
 											return (

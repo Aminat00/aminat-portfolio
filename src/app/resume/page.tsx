@@ -10,7 +10,7 @@ import {
 	SiMicrosoftazure,
 	SiPostgresql,
 	SiTypescript,
-	SiMongodb,
+	SiGraphql,
 } from "react-icons/si";
 
 // about data
@@ -180,7 +180,7 @@ const skills = {
 			name: "Microsoft Azure",
 		},
 		{ icon: <SiPostgresql />, name: "PostGreSQL" },
-		{ icon: <SiMongodb />, name: "MongoDB" },
+		{ icon: <SiGraphql />, name: "GraphQL" },
 		{ icon: <SiTypescript />, name: "Typescript" },
 	],
 };
@@ -234,8 +234,10 @@ const Resume = () => {
 												<li
 													key={index}
 													className="bg-[#232329] py-6 px-10 rounded-xl flex flex-col  items-center lg:items-start gap-1">
-													<div className="flex justify-between w-full">
-														<div className="flex-col">
+													{/* Horizontal alignment container */}
+													<div className="flex flex-col lg:flex-row justify-between w-full">
+														{/* Left side: Duration and Position */}
+														<div className="flex flex-col items-center lg:items-start lg:w-1/2">
 															<span className="text-accent">
 																{item.duration}
 															</span>
@@ -243,11 +245,12 @@ const Resume = () => {
 																{item.position}
 															</h3>
 														</div>
-														<div className="flex-col">
+														{/* Right side: Company and Location */}
+														<div className="flex flex-col items-center lg:items-end lg:w-1/2">
 															<span className="text-accent">
 																{item.company}
 															</span>
-															<h3 className="text-xl max-w-[260px] min-h-[60px] text-center lg:text-left">
+															<h3 className="text-xl max-w-[260px] min-h-[60px] text-center lg:text-right">
 																{item.location}
 															</h3>
 														</div>
@@ -349,7 +352,7 @@ const Resume = () => {
 						{/* about */}
 						<TabsContent
 							value="about"
-							className="w-full text-center xl:text-left">
+							className="w-full text-center xl:text-left px-4">
 							<div className="flex flex-col gap-[30px]">
 								<h3 className="text-4xl font-bold">{about.title}</h3>
 
@@ -358,7 +361,7 @@ const Resume = () => {
 										return (
 											<li
 												key={index}
-												className="flex items-center justify-center xl:justify-start gap-3">
+												className="flex flex-col sm:flex-row items-center justify-center xl:justify-start gap-3">
 												<span className="text-white/60">{item.fieldName}</span>
 												<span className="text-xl">{item.fieldValue}</span>
 											</li>

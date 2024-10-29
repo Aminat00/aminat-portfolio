@@ -49,41 +49,63 @@ const experience = {
 	icon: "/assets/resume/badge.svg",
 	title: "My experience",
 	description:
-		"With over 4 years of experience, I have improved load times for over 2 million users and streamlined development processes to save my team hours. My expertise lies in leveraging modern technologies like React, React Native, Node.js, and Python to enhance user engagement.",
+		"With over 3.5 years of experience in software development, I have supported projects that enhance user experience and streamline workflows. My expertise includes modern technologies like React, React Native, Node.js, Next.js, Tailwind CSS, and NestJS, with a focus on automation using GitHub Actions and data management with TypeORM. I prioritize collaboration and continuous improvement in all my projects.",
 	items: [
 		{
 			company: "Aurem",
-			position: "Mobile & Full-Stack Engineer",
-			duration: "December 2022 – Present",
+			position: "Full-Stack Mobile Engineer",
+			duration: "December 2022 – August 2024",
 			location: "Abu Dhabi, UAE [Remote]",
 			description: [
-				"Executed migration of the website frontend from Chakra UI to Tailwind CSS, which led to 30% reduction in developer time spent on styling tasks and a 25% improvement in page load speed",
-				"Automated build of Mobile App in Expo Go which saved 7 hours of work effort",
-				"Refactored existing Node.js and Nest.js code on the company website, resulting in a 10% improvement in server efficiency",
-				"Engineered and deployed robust user registration and authentication system utilizing NestJS, resulting in a 40% reduction in unauthorized access attempts and a 25% increase in user sign-ups",
+				"Contributed to the migration of the website frontend from Chakra UI to Tailwind CSS, enhancing consistency and reducing styling time by 30%.",
+				"Developed user interfaces in React Native based on design specifications and collaborated closely with designers to align with the design system.",
+				"Automated the Expo build process using GitHub Actions, enabling app updates upon commits to the main branch, saving 7 hours of manual effort.",
+				"Designed and implemented backend APIs with NestJS, including models, entities, mutations, and queries, to support new features from concept to deployment.",
+				"Led end-to-end feature development, managing backend API creation, frontend integration, and handoff to QA for testing.",
+				"Regularly managed build deployments for both the website and React Native app, ensuring seamless updates and functionality.",
+			],
+			technologies: [
+				"React",
+				"React Native",
+				"Tailwind CSS",
+				"GitHub Actions",
+				"NestJS",
+				"TypeORM",
+				"esbuild",
+				"Expo",
 			],
 		},
 		{
 			company: "HCL Technologies",
 			position: "Front-End Engineer",
-			duration: "September 2021 – December 2022",
+			duration: "January 2022 – December 2022",
 			location: "Warsaw, Poland",
 			description: [
-				"Contributed to improving the performance of settings-> my account section for 2M+ users by implementing Micro-Frontends with Single-SPA",
-				"Supported coordination of demos and workshops, clarifying technical aspects for stakeholders, leading to a 30% increase in buy-in and a 25% faster implementation rate",
-				"Contributed to reducing website loading times by 30% for over 2 million users.",
+				"Assisted in implementing Micro-Frontends using Single-SPA for the 'My Account' section, supporting modularity and scalability improvements for over 2 million users.",
+				"Contributed to optimizing code and managing assets, helping to reduce load times by 30% across high-traffic areas.",
+				"Supported peers on account-related issues in the work-related website, fostering a collaborative team environment.",
+				"Created documentation to guide team members in setting up new environments for a large-scale project, simplifying onboarding and development processes.",
+			],
+			technologies: [
+				"React",
+				"Styled components",
+				"Micro Front-End",
+				"Docker",
+				"Jira",
+				"Git",
 			],
 		},
 		{
 			company: "proceedit",
-			position: "Junior Full-Stack Engineer",
-			duration: "August 2020 – September 2021",
+			position: "Full-Stack Engineer Intern",
+			duration: "July 2021 – January 2022",
 			location: "Barcelona, Spain [Remote]",
 			description: [
-				"Implemented RESTful APIs and services using Python and Flask, enhancing backend functionality and integration with frontend applications.",
-				"Developed data processing scripts in Python to automate routine tasks, improving efficiency and accuracy by 25%.",
-				"Worked on the website's dashboard, implementing new features and optimizing existing ones to enhance user experience for over 1000 users.",
+				"Assisted in migrating the company's WordPress website to AWS, enhancing scalability and reliability.",
+				"Contributed to the development and maintenance of the company’s website built with Flutter, improving cross-platform functionality and user experience.",
+				"Worked on the website's dashboard, implementing new features and optimizing existing ones to enhance the experience for over 500 users.",
 			],
+			technologies: ["Flutter", "AWS", "Python", "Jira", "Git"],
 		},
 	],
 };
@@ -206,7 +228,7 @@ const Resume = () => {
 				opacity: 1,
 				transition: { delay: 2.4, duration: 0.4, ease: "easeIn" },
 			}}
-			className="min-h-[80vh] flex items-center justify-center py-12 xl:py-0">
+			className="min-h-[80vh] flex items-center justify-center py-12">
 			<div className="container mx-auto">
 				<Tabs
 					defaultValue="experience"
@@ -224,7 +246,7 @@ const Resume = () => {
 						<TabsContent value="experience" className="w-full">
 							<div className="flex flex-col gap-[30px] text-center xl:text-left">
 								<h3 className="text-4xl font-bold">{experience.title}</h3>
-								<p className="max-w-[600px] text-white/60 mx-auto xl:mx-0">
+								<p className="max-w-[700px] text-white/60 mx-auto xl:mx-0">
 									{experience.description}
 								</p>
 								<ScrollArea className="min-h-[400px]">
@@ -262,6 +284,13 @@ const Resume = () => {
 															<li key={descIndex}> {desc}</li>
 														))}
 													</ul>
+
+													<div className="mt-4 text-accent">
+														<strong className="text-white">
+															Technologies:
+														</strong>{" "}
+														{item.technologies.join(", ")}
+													</div>
 												</li>
 											);
 										})}

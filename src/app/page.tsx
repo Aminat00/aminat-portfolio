@@ -17,12 +17,16 @@ const Home = () => {
 							<span className="text-accent">Aminat Moldalieva</span>
 						</h1>
 						<p className="max-w-[500px] mb-9 text-white/80">
-							{`I am a full-stack software engineer passionate about optimizing performance 
-							and creating user-friendly solutions. I thrive on using technologyies like  `}
+							{`As a skilled full-stack mobile engineer with over 3.5 years of experience, 
+							I am dedicated to delivering seamless and impactful user experiences. 
+							My work focuses on optimizing performance and building intuitive, 
+		scalable solutions with technologies such as `}
 							<span className="text-accent">
-								{`React, React Native, Next.js, NestJS, Node.js, and Python `}
+								{`React, React Native, Next.js, NestJS, Node.js, and GitHub Actions`}
 							</span>
-							to build meaningful experiences that make a difference.
+							.
+							{` Whether developing engaging mobile interfaces or managing backend processes, 
+		I am committed to creating innovative products that make a real difference.`}
 						</p>
 						{/* btn and socials */}
 						<div className="flex flex-col xl:flex-row items-center gap-8">

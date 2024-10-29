@@ -52,7 +52,7 @@ const experience = {
 		"With over 3.5 years of experience in software development, I have supported projects that enhance user experience and streamline workflows. My expertise includes modern technologies like React, React Native, Node.js, Next.js, Tailwind CSS, and NestJS, with a focus on automation using GitHub Actions and data management with TypeORM. I prioritize collaboration and continuous improvement in all my projects.",
 	items: [
 		{
-			company: "Freelancing",
+			company: "Freelancing and Side Projects",
 			position: "Full-Stack Mobile Engineer",
 			duration: "August 2022 – August 2024",
 			location: "Worldwide [Remote]",

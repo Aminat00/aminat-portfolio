@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 @layer base {
-	:root {
-		--radius: 0.5rem;
-	}
-	body {
-		@apply font-primary bg-primary text-white leading-loose;
-	}
+  :root {
+    --radius: 0.5rem;
+  }
+  body {
+    @apply font-primary bg-background text-body leading-relaxed;
+  }
 }

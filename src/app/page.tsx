@@ -15,7 +15,7 @@ const techStack = [
 ];
 
 const staggerDelay = 0.1;
-const baseDelay = 1.5; // wait for page transition
+const baseDelay = 0.2; // wait for page fade-in
 
 const fadeUp = (index: number) => ({
   initial: { opacity: 0, y: 20 },

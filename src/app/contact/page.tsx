@@ -24,6 +24,7 @@ type FormErrors = {
 
 const Contact = () => {
   const [errors, setErrors] = React.useState<FormErrors>({});
+  const [submitted, setSubmitted] = React.useState(false);
   const [formData, setFormData] = React.useState({
     firstName: "",
     lastName: "",
@@ -88,25 +89,32 @@ const Contact = () => {
       return;
     }
 
-    fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    }).then((res) => {
-      if (res.status === 200) {
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phoneNumber: "",
-          title: "",
-          message: "",
-        });
-      }
+    const body = new URLSearchParams({
+      "form-name": "contact",
+      ...formData,
     });
+
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString(),
+    })
+      .then((res) => {
+        if (res.ok) {
+          setSubmitted(true);
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            title: "",
+            message: "",
+          });
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      })
+      .catch(() => alert("Something went wrong. Please try again."));
   };
 
   return (
@@ -120,8 +128,28 @@ const Contact = () => {
     >
       <div className="container mx-auto max-w-2xl">
         <div className="flex flex-col gap-8">
+          {/* success message */}
+          {submitted && (
+            <div className="p-6 bg-surface border border-primary/30 rounded-xl text-center">
+              <h3 className="text-xl font-bold text-heading">Message sent!</h3>
+              <p className="text-body">Thank you for reaching out. I&apos;ll get back to you soon.</p>
+            </div>
+          )}
+
           {/* form */}
-          <form className="flex flex-col gap-6 p-8 bg-white border border-border rounded-xl shadow-sm">
+          <form
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            className="flex flex-col gap-6 p-8 bg-white border border-border rounded-xl shadow-sm"
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <p className="hidden">
+              <label>
+                Don&apos;t fill this out: <input name="bot-field" />
+              </label>
+            </p>
             <h3 className="text-3xl font-extrabold text-heading">
               Let&apos;s work together
             </h3>

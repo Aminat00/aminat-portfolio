@@ -14,7 +14,7 @@ export const Work = () => (
   <section id="work" className="section">
     <h6 className="eyebrow">03 — Selected work</h6>
     <h2 style={{ fontSize: "clamp(28px,4vw,44px)", letterSpacing: "-0.02em", maxWidth: "16ch", margin: "0 0 var(--space-8)" }}>
-      Things I&apos;ve built and shipped
+      Things I&apos;ve built
     </h2>
 
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: "var(--space-4)" }}>
@@ -37,7 +37,10 @@ export const Work = () => (
               />
             </figure>
           )}
-          <div className="card-kicker">n8n · Claude · Tavily</div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--space-2)" }}>
+            <div className="card-kicker">n8n · Claude · Tavily</div>
+            <Tag label="COMING SOON" variant="outline" />
+          </div>
           <div className="card-title">Nidham (نظام)</div>
           <p className="card-body">
             A planner for Muslims with ADHD. A plain-language brain-dump goes through three n8n agents — capture,
@@ -52,9 +55,6 @@ export const Work = () => (
             <Tag label="Supabase" />
           </div>
           <div style={{ display: "flex", gap: "var(--space-6)", flexWrap: "wrap", marginTop: "var(--space-1)" }}>
-            <a href="#agentic" className="card-meta" style={{ color: "var(--color-accent)" }}>
-              See how it works <ArrowIcon size={15} />
-            </a>
             <a
               href="https://try.ka.nz/ai/aminatmoldalieva"
               target="_blank"
@@ -72,7 +72,7 @@ export const Work = () => (
       <Reveal delay={0.06} style={{ height: "100%" }}>
         <div className="card elev-sm card-hover" style={cardBase}>
           <div className="card-kicker">React Native · Fintech</div>
-          <div className="card-title">LaunchGood mobile redesign</div>
+          <div className="card-title">LaunchGood mobile facelift</div>
           <p className="card-body">
             Rebuilt key screens and components for a fintech app serving millions across 100+ countries, shipping
             each screen end to end — API integration, state, UI and Jest component tests — with coding agents

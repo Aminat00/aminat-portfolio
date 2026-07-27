@@ -62,7 +62,7 @@ export const About = () => (
           I use AI tooling heavily and deliberately. Coding agents drive the first pass on feature work and I
           review what comes back against real devices and real edge cases — which is most of why work that used
           to take weeks now lands in days. Nidham was the clearest test of that: a full React Native app and a
-          three-agent n8n backend, designed and shipped in 48 hours.
+          three-agent n8n backend, designed and built in 48 hours.
         </p>
         <p className="text-muted" style={{ fontSize: 16, lineHeight: 1.65, maxWidth: "58ch", margin: 0 }}>
           Almost everything on this page started as something a project needed and I hadn&apos;t done before —

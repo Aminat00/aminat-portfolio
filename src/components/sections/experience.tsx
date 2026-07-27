@@ -8,7 +8,7 @@ const roles = [
     accent: true,
     period: "Aug 2025 – Present · Remote, US",
     bullets: [
-      "Rebuilt core screens of a React Native app serving 100+ countries as part of a full redesign — shipping each feature end to end across API integration, state, UI and Jest component tests.",
+      "Rebuilt core screens of a React Native app serving 100+ countries as part of an app-wide facelift — shipping each feature end to end across API integration, state, UI and Jest component tests.",
       "Integrated Claude via MCP into the team's workflow for design handoff and test authoring.",
       "Ran coding agents through feature work with a spec → generate → diff-review → test loop, catching device-specific edge cases the generated output missed.",
     ],

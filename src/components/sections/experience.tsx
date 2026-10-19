@@ -1,167 +1,100 @@
-import { Fragment } from "react";
-import { Reveal } from "@/components/motion/reveal";
+"use client";
 
-const roles = [
-  {
-    role: "Mobile Software Engineer",
-    company: "LaunchGood",
-    accent: true,
-    period: "Aug 2025 – Present · Remote, US",
-    bullets: [
-      "Rebuilt core screens of a React Native app serving 100+ countries as part of an app-wide facelift — shipping each feature end to end across API integration, state, UI and Jest component tests.",
-      "Integrated Claude via MCP into the team's workflow for design handoff and test authoring.",
-      "Ran coding agents through feature work with a spec → generate → diff-review → test loop, catching device-specific edge cases the generated output missed.",
-    ],
-  },
-  {
-    role: "QA Automation Engineer",
-    company: "LaunchGood",
-    period: "Feb 2025 – Aug 2025 · Remote, US",
-    bullets: [
-      "Built the company's first Playwright end-to-end suite from scratch, with reusable page-object helpers other engineers extended.",
-      "Put it on a five-minute GitHub Actions cron as synthetic monitoring, with Slack webhook alerts on failure.",
-      "Brought detection of production breakages down from hours to under five minutes.",
-    ],
-  },
-  {
-    role: "Freelance Full-Stack Mobile Engineer",
-    company: "Self-Employed",
-    period: "Aug 2024 – Feb 2025 · Remote",
-    bullets: [
-      "Developed a mobile app integrated with the OpenAI API for AI-driven user features.",
-      "Built a full-stack web platform with Next.js, Supabase, tRPC and Prisma.",
-      "Created an e-commerce site with Next.js and the Shopify Headless Storefront API.",
-    ],
-  },
-  {
-    role: "Full-Stack Mobile Engineer",
-    company: "Aurem",
-    period: "Dec 2022 – Aug 2024 · Abu Dhabi, UAE",
-    bullets: [
-      "Migrated the frontend from Chakra UI to Tailwind CSS, cutting styling time by 30%.",
-      "Automated the Expo build with GitHub Actions, saving 7 hours of manual effort weekly.",
-      "Designed and implemented backend APIs with NestJS — models, entities and queries.",
-    ],
-  },
-  {
-    role: "Frontend Engineer",
-    company: "HCL Technologies",
-    period: "Jan 2022 – Dec 2022 · Warsaw, Poland",
-    bullets: [
-      "Developed Micro-Frontends with Single-SPA for the 'My Account' section supporting 2M+ users.",
-      "Started and ran a recurring peer knowledge-sharing session for the frontend team.",
-    ],
-  },
-  {
-    role: "Full-Stack Engineer Intern",
-    company: "proceedit",
-    period: "Jul 2021 – Jan 2022 · Barcelona, Spain",
-    bullets: [
-      "Migrated the company WordPress site to AWS.",
-      "Developed and maintained a Flutter-based website for cross-platform reach.",
-    ],
-  },
-];
+import { useEffect, useRef } from "react";
+import { ArrowIcon } from "@/components/icons";
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
+import { useScrollProgress } from "@/components/motion/use-scroll-progress";
+import { EXPERIENCE, LINKS } from "@/content/site";
 
-const skillGroups = [
-  {
-    title: "Mobile & Frontend",
-    variant: "neutral" as const,
-    items: ["React Native", "Expo", "TypeScript", "Next.js", "React", "Flutter", "Tailwind"],
-  },
-  {
-    title: "AI & Automation",
-    variant: "accent" as const,
-    items: ["n8n", "Claude / MCP", "Tavily", "OpenAI API", "AI coding agents"],
-  },
-  {
-    title: "Backend",
-    variant: "neutral" as const,
-    items: ["Node.js", "NestJS", "tRPC", "Prisma", "Supabase"],
-  },
-  {
-    title: "Testing & CI",
-    variant: "neutral" as const,
-    items: ["Playwright", "Jest", "GitHub Actions"],
-  },
-];
+// The line's tip rides at this share of the screen height: the line grows from the timeline's top
+// reaching it until its bottom does, so its progress runs over the timeline's own height.
+const TIP = 0.6;
+const lineEnd = (el: Element) => TIP - (el as HTMLElement).offsetHeight / window.innerHeight;
 
-export const Experience = () => (
-  <Fragment>
-    <section id="experience" className="section">
-      <h6 className="eyebrow">04 — Experience</h6>
-      <h2 style={{ fontSize: "clamp(28px,4vw,44px)", letterSpacing: "-0.02em", maxWidth: "16ch", margin: "0 0 var(--space-8)" }}>
-        Where I&apos;ve worked
-      </h2>
+type Role = (typeof EXPERIENCE)[number];
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-        {roles.map((role, i) => (
-          <Reveal key={`${role.role}-${role.period}`} delay={i * 0.05}>
-          <div
-            style={{
-              display: "grid",
-              gap: "var(--space-3)",
-              borderLeft: "1px solid var(--color-divider)",
-              paddingLeft: "var(--space-6)",
-              position: "relative",
-            }}
-          >
-            <span
-              style={{
-                position: "absolute",
-                left: -4,
-                top: 6,
-                width: 7,
-                height: 7,
-                borderRadius: "50%",
-                background: role.accent ? "var(--color-accent)" : "var(--color-neutral-500)",
-              }}
-            />
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "var(--space-2)", alignItems: "baseline" }}>
-              <h4 style={{ margin: 0 }}>
-                {role.role} ·{" "}
-                <span style={role.accent ? { color: "var(--color-accent)" } : undefined}>{role.company}</span>
-              </h4>
-              <span className="text-muted" style={{ fontSize: 13 }}>
-                {role.period}
-              </span>
-            </div>
-            <ul
-              className="text-muted"
-              style={{ margin: 0, paddingLeft: "1.1em", fontSize: 14, lineHeight: 1.6, display: "flex", flexDirection: "column", gap: 4 }}
-            >
-              {role.bullets.map((bullet, i) => (
-                <li key={i}>{bullet}</li>
-              ))}
-            </ul>
-          </div>
-          </Reveal>
-        ))}
+// Consecutive roles at one company form a group: LaunchGood's three roles sit under one heading,
+// every other role is a row that names its own company.
+const groups: Role[][] = [];
+for (const e of EXPERIENCE) {
+  const last = groups[groups.length - 1];
+  if (last && last[0].company === e.company) last.push(e);
+  else groups.push([e]);
+}
+
+function RoleRow({ e, grouped }: { e: Role; grouped: boolean }) {
+  const Title = grouped ? "h4" : "h3";
+  return (
+    <li className="timeline-role">
+      <p className="timeline-when">{e.when}</p>
+      <span className="timeline-dot" aria-hidden="true" />
+      <div className="timeline-body">
+        <Title className="timeline-title">{e.role}</Title>
+        {!grouped && <p className="timeline-co">{e.company}</p>}
+        <p className="timeline-text">{e.line}</p>
+        <ul className="timeline-tags" aria-label="Stack">
+          {e.tags.map((t) => (
+            <li className="tag" key={t}>
+              {t}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </li>
+  );
+}
+
+// Plain markup, readable with JavaScript off. With it the line grows down the page with the scroll, and each
+// role's dot lights (loses .is-off) as the line's tip reaches it. At rest the line is whole and every dot lit.
+export function Experience() {
+  const timeline = useRef<HTMLDivElement>(null);
+  const dots = useRef<{ el: HTMLElement; at: number }[]>([]);
+  // Where each dot sits down the line, as a share of its length.
+  useEffect(() => {
+    const el = timeline.current;
+    if (!el) return;
+    const measure = () => {
+      const top = el.getBoundingClientRect().top;
+      dots.current = Array.from(el.querySelectorAll<HTMLElement>(".timeline-dot"), (d) => {
+        const r = d.getBoundingClientRect();
+        return { el: d, at: (r.top + r.height / 2 - top) / el.offsetHeight };
+      });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  useScrollProgress(timeline, TIP, lineEnd, (p) => {
+    timeline.current?.querySelector<HTMLElement>(".timeline-line")?.style.setProperty("transform", `scaleY(${p.toFixed(4)})`);
+    for (const d of dots.current) d.el.classList.toggle("is-off", p < d.at);
+  });
+
+  return (
+    <section id="experience" className="section" aria-labelledby="experience-title">
+      <div className="section-inner">
+        <ScrollReveal className="section-head">
+          <h2 id="experience-title">Experience</h2>
+        </ScrollReveal>
+        <div className="timeline" ref={timeline}>
+          <span className="timeline-line" aria-hidden="true" />
+          <ol className="timeline-groups">
+            {groups.map((g) => (
+              <li className="timeline-group" key={g[0].company + g[0].when}>
+                {g.length > 1 && <h3 className="timeline-company">{g[0].company}</h3>}
+                <ol className="timeline-roles">
+                  {g.map((e) => (
+                    <RoleRow key={e.when} e={e} grouped={g.length > 1} />
+                  ))}
+                </ol>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <a href={LINKS.resume} className="text-link">
+          View full résumé (PDF) <ArrowIcon size={13} style={{ transform: "rotate(90deg)" }} />
+        </a>
       </div>
     </section>
-
-    {/* Skills — visual continuation of Experience, reduced top padding */}
-    <section
-      className="section"
-      style={{ paddingTop: 0, paddingBottom: "clamp(40px,7vw,80px)" }}
-      aria-label="Skills"
-    >
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: "var(--space-6)" }}>
-        {skillGroups.map((group) => (
-          <div key={group.title}>
-            <h6 className="eyebrow" style={{ margin: "0 0 var(--space-4)" }}>
-              {group.title}
-            </h6>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {group.items.map((item) => (
-                <span key={item} className={`tag tag-${group.variant}`}>
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  </Fragment>
-);
+  );
+}

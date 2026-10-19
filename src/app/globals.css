@@ -3,318 +3,547 @@
 @tailwind utilities;
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Nocturne — design-system tokens and component classes.
-   Ported verbatim from the imported Claude Design bundle. This is the source
-   of truth for the system's look. Values unchanged; fonts wired to next/font.
+   Signal — design tokens.
+   One idea runs the whole page: noise becomes signal. The palette is sampled
+   from the hero footage (ink blue-black depth, ice-blue light), amber is the
+   single accent and appears only on the call to action and rare emphasis.
    ══════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --color-bg: #161826;
-  --color-surface: #232532;
-  --color-text: #e9e9ed;
-  --color-accent: #9184d9;   /* product blurple */
-  --color-accent-2: #a7a1db;
-  --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+  --canvas: #070d16;
+  --film-edge: #070b16; /* the film's measured edge colour, behind the stage */
+  /* The film's edge colour at 80%: laid over the crystal behind section text. Its brightest pixel (the white
+     core) comes out near rgb(57 60 69), which keeps --text-secondary at 5:1 (motion.cjs measures it). */
+  --dim: rgb(7 11 22 / .8);
+  --canvas-deep: #040810;
+  --panel: #0d1726;
+  --panel-raised: #12203a;
+  --line: rgba(143, 211, 255, 0.14);
+  --line-strong: rgba(143, 211, 255, 0.38);
 
-  /* Tonal ramps — one shared OKLCH lightness scale */
-  --color-neutral-100: #f3f5fe;
-  --color-neutral-200: #e4e7f5;
-  --color-neutral-300: #cfd3e5;
-  --color-neutral-400: #b2b6ca;
-  --color-neutral-500: #9397ab;
-  --color-neutral-600: #75798c;
-  --color-neutral-700: #595d6c;
-  --color-neutral-800: #3f424d;
-  --color-neutral-900: #292b31;
+  --signal: #8fd3ff;
+  --signal-soft: rgba(143, 211, 255, 0.55);
+  --signal-muted: rgba(143, 211, 255, 0.12);
 
-  --color-accent-100: #f5f4ff;
-  --color-accent-200: #e7e5fe;
-  --color-accent-300: #d2cefd;
-  --color-accent-400: #b5abfc;
-  --color-accent-500: #968ae0;
-  --color-accent-600: #796cbf;
-  --color-accent-700: #5d5294;
-  --color-accent-800: #423a6a;
-  --color-accent-900: #2b2741;
+  --accent: #ffb454;
+  --accent-hover: #ffc577;
+  --accent-ink: #1a1000;
+  --accent-muted: rgba(255, 180, 84, 0.18);
 
-  --color-accent-2-100: #f5f4ff;
-  --color-accent-2-200: #e7e5fe;
-  --color-accent-2-300: #d2cefd;
-  --color-accent-2-400: #b5afe8;
-  --color-accent-2-500: #9690c9;
-  --color-accent-2-600: #7972a9;
-  --color-accent-2-700: #5c5783;
-  --color-accent-2-800: #423e5d;
-  --color-accent-2-900: #2b293a;
+  --text-primary: #eaf3fb;
+  --text-secondary: #9fb2c8;
+  --text-faint: #7689a1; /* 5.4:1 on the canvas */
 
-  /* Deck section-divider ground — saturated deep indigo. Deck-scale fills only. */
-  --color-section: #262a60;
-  --color-section-glow: #353b80;
-  --color-section-ghost: #4c5397;
+  --font-display: var(--font-syne), "Syne", system-ui, sans-serif;
+  --font-text: var(--font-body), "Instrument Sans", system-ui, sans-serif;
+  --font-code: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
 
-  --font-heading: var(--font-inter), system-ui, sans-serif;
-  --font-heading-weight: 500;
-  --font-body: var(--font-inter), system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.18, 1);
 
-  --space-1: 2.8px;
-  --space-2: 5.6px;
-  --space-3: 8.4px;
-  --space-4: 11.2px;
-  --space-6: 16.8px;
-  --space-8: 22.4px;
+  --gutter: clamp(20px, 5vw, 64px);
+  --header-h: 66px; /* the bar's height: the stacked film starts below it. Touch buttons are 44px tall, so the bar grows. */
+  --measure: 1120px;
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 14px;
-
-  /* Elevation — hairline edge + ambient darkness on the dark ground */
-  --shadow-sm: 0 0 0 1px #3f424d;
-  --shadow-md: 0 0 0 1px #595d6c, 0 6px 18px rgba(0,0,0,0.55);
-  --shadow-lg: 0 0 0 1px #9397ab, 0 16px 40px rgba(0,0,0,0.65);
+  /* Tight edge, mid glow, wide falloff. The wide layer stays light: the stage
+     scrim carries the contrast, so a heavy one only pools into a visible halo. */
+  --tshadow: 0 1px 2px rgba(4, 8, 16, 0.9), 0 2px 10px rgba(4, 8, 16, 0.6), 0 10px 40px rgba(4, 8, 16, 0.42);
 }
-
-body {
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-body);
-}
-h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
-
-.lighten { mix-blend-mode: lighten; background-color: transparent; }
 
 /* ── Base ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; font-size: 15px; line-height: 1.55; font-weight: 400; }
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
-  line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 var(--space-2);
+html { overflow-x: hidden; overflow-x: clip; scroll-behavior: smooth; scroll-padding-top: 88px; }
+body {
+  margin: 0; overflow-x: hidden; overflow-x: clip;
+  background: var(--canvas); color: var(--text-primary);
+  font-family: var(--font-text); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
-h1 { font-size: 42px; }
-h2 { font-size: 32px; }
-h3 { font-size: 25px; }
-h4 { font-size: 20px; }
-h5 { font-size: 16px; }
-h6 { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
-p { margin: 0 0 var(--space-3); }
-a { color: var(--color-accent); text-underline-offset: 3px; }
-img { display: block; max-width: 100%; }
-figure { margin: 0; }
-figcaption {
-  font-size: 11px; margin-top: var(--space-1);
-  color: color-mix(in srgb, var(--color-text) 55%, transparent);
-}
-.text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height: 1.02; letter-spacing: -0.03em; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+img, svg, video { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+::selection { background: rgba(143, 211, 255, 0.28); }
 :focus { outline: none; }
-:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
-/* ── Rules — fade to transparent at both ends (a Nocturne signature) ───── */
-.hr {
-  height: 1px; border: 0; margin: var(--space-4) 0;
-  background: linear-gradient(to right,
-    transparent, var(--color-divider) 48px,
-    var(--color-divider) calc(100% - 48px), transparent);
+.skip-link {
+  position: absolute; top: -100px; left: 16px; z-index: 100;
+  padding: 10px 14px; background: var(--accent); color: var(--accent-ink);
+  border-radius: 8px; font-weight: 600;
+}
+.skip-link:focus-visible { top: 12px; }
+
+.mono { font-family: var(--font-code); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.eyebrow { font-family: var(--font-code); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
+.lede { font-size: clamp(17px, 1.4vw, 19px); line-height: 1.55; color: var(--text-secondary); }
+.wrap { max-width: var(--measure); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* ── The environment layer: one fixed world behind everything ─────────── */
+.env {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 78% 18%, rgba(143, 211, 255, 0.10), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 18% 82%, rgba(60, 110, 170, 0.12), transparent 70%),
+    var(--canvas);
+}
+.env::before {
+  content: ""; position: absolute; inset: -20%;
+  background:
+    radial-gradient(ellipse 40% 34% at 60% 40%, rgba(143, 211, 255, 0.07), transparent 70%);
+  animation: env-drift 90s ease-in-out -30s infinite;
+}
+.env::after {
+  content: ""; position: absolute; inset: 0; opacity: 0.045; mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* Covered by the film layer, which stays behind the whole home page (film-stage.tsx sets the class): nothing to paint. */
+html.film-covers .env { visibility: hidden; }
+/* Reduced motion on the home page: no film, so the end still is the crystal behind the page, in the same
+   file the stage's <picture> already shows (no second download). */
+html.js:not(.film-js) body:has(> .film) .env { background: url(/film/end-desktop.webp) center / cover no-repeat, var(--film-edge); }
+@media (max-width: 760px), (max-aspect-ratio: 4/5) {
+  html.js:not(.film-js) body:has(> .film) .env { background: url(/film/end-phone.webp) center / contain no-repeat, var(--film-edge); }
+}
+@keyframes env-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-6%, 5%); }
 }
 
 /* ── Buttons ──────────────────────────────────────────────────────────── */
 .btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  cursor: pointer; text-decoration: none;
-  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
-  font-size: 14px; line-height: 1.2; color: var(--color-text);
-  background: transparent; border: 1px solid transparent;
-  padding: var(--space-2) calc(var(--space-3) * 1.2);
-  border-radius: var(--radius-md);
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 20px; border-radius: 999px; border: 1px solid transparent;
+  font-family: var(--font-text); font-weight: 600; font-size: 15px; line-height: 1.2;
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: background-color .25s var(--ease-out), border-color .25s var(--ease-out), color .25s var(--ease-out), transform .25s var(--ease-out);
+  text-shadow: none;
 }
-.btn svg { display: block; }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.btn-primary { color: var(--color-accent); border-color: var(--color-accent); }
-.btn-primary:hover { background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
-.btn-primary:active { background: color-mix(in srgb, var(--color-accent) 22%, transparent); }
-.btn-secondary { border-color: var(--color-divider); }
-.btn-secondary:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
-.btn-secondary:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
-.btn-ghost { color: var(--color-accent); padding-inline: var(--space-1); }
-.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
-.btn-ghost:active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
-.btn-icon { width: 36px; height: 36px; padding: 0; }
-.btn-block { width: 100%; margin-top: var(--space-2); }
+.btn svg { flex: none; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); transform: translateY(-1px); }
+.btn-secondary { background: rgba(7, 13, 22, 0.35); color: var(--text-primary); border-color: var(--line-strong); backdrop-filter: blur(8px); }
+.btn-secondary:hover { border-color: var(--signal); background: var(--signal-muted); }
+.btn-ghost { color: var(--text-secondary); padding-inline: 8px; }
+.btn-ghost:hover { color: var(--text-primary); }
+@media (pointer: coarse) { .btn { min-height: 44px; } :root { --header-h: 72px; } }
 
-/* ── Forms ────────────────────────────────────────────────────────────── */
-.field > label {
-  display: block; font-size: 12px; margin-bottom: 5px;
-  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+/* Small links in the code font: "See the proof", "Back to selected work", "View full résumé (PDF)". */
+.film-proof, .case-back, .text-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-code); font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--signal); transition: color .2s;
 }
-.input {
-  width: 100%; min-height: 36px; padding: 6px 10px; font: inherit;
-  font-size: 14px; color: var(--color-text); caret-color: var(--color-accent);
-  background: var(--color-surface);
-  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
-}
-.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
-.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
-textarea.input { min-height: 90px; resize: vertical; }
+:is(.film-proof, .case-back, .text-link):hover { color: var(--text-primary); }
+.text-link { align-self: flex-start; }
 
-/* ── Cards ────────────────────────────────────────────────────────────── */
-.card {
-  display: flex; flex-direction: column; gap: var(--space-2);
-  padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-surface);
+/* ── Header ───────────────────────────────────────────────────────────── */
+/* Over the film the header paints no bar and no box, so it never covers the stone: its words
+   carry a soft text shadow for the moments rocks or the crystal pass under them. It turns solid
+   once the film is out from under it (site-header.tsx). */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  transition: background-color .4s var(--ease-out), backdrop-filter .4s;
 }
-.card-kicker { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); }
-.card-title {
-  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
-  font-size: 17px; line-height: 1.2;
-}
-.card-body { margin: 0; font-size: 13px; opacity: 0.8; flex: 1; }
-.card-meta {
-  display: flex; align-items: center; gap: 6px; font-size: 11px;
-  color: color-mix(in srgb, var(--color-text) 50%, transparent);
-}
-.elev-sm { box-shadow: var(--shadow-sm); }
-.elev-md { box-shadow: var(--shadow-md); }
-.elev-lg { box-shadow: var(--shadow-lg); }
-
-/* ── Tags ─────────────────────────────────────────────────────────────── */
-.tag {
-  display: inline-flex; align-items: center; font-size: 11px;
-  letter-spacing: 0.02em; padding: 3px 10px;
-  border-radius: calc(var(--radius-md) * 0.75);
-}
-.tag-accent { background: var(--color-accent-800); color: var(--color-accent-100); }
-.tag-accent-2 { background: var(--color-accent-2-800); color: var(--color-accent-2-100); }
-.tag-neutral { background: var(--color-neutral-800); color: var(--color-neutral-100); }
-.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
-
-/* ── Navigation ───────────────────────────────────────────────────────── */
+/* Without JavaScript the bar never turns solid: it stays at the top of the page and scrolls away. */
+html:not(.js) .header { position: absolute; }
+.header:not(.solid) :is(.nav-brand, .nav-link, .nav-email) { text-shadow: var(--tshadow); }
+/* The "Email" button: over the film only its words and a hairline outline (no fill, no blur, so no box
+   on the rocks); its normal button fill comes back once the bar is solid. */
+.nav-email { padding: 9px 16px; font-size: 14px; }
+.header:not(.solid) .nav-email { background: transparent; backdrop-filter: none; }
+.header.solid { background: rgba(7, 13, 22, 0.78); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
 .nav {
-  display: flex; align-items: center; gap: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  border-bottom: none;
+  max-width: var(--measure); margin-inline: auto; padding: 14px var(--gutter); min-height: var(--header-h);
+  display: flex; align-items: center; gap: 28px;
 }
-.nav-brand {
-  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
-  font-size: 18px; margin-right: auto;
-}
-.nav a { color: inherit; text-decoration: none; font-size: 14px; }
-.nav a:hover, .nav a[aria-current='page'] { color: var(--color-accent); }
-
-/* Mobile menu — a toggle button + a dropdown panel, both hidden on desktop. */
-.nav-toggle {
-  display: none; align-items: center; justify-content: center;
-  width: 44px; height: 44px; margin-left: var(--space-2); padding: 0;
-  background: transparent; border: 0; cursor: pointer;
-  color: var(--color-text); border-radius: var(--radius-md);
-}
-.nav-toggle:hover { color: var(--color-accent); }
-.nav-toggle:active { background: color-mix(in srgb, var(--color-text) 8%, transparent); }
+.nav-brand { display: inline-flex; align-items: center; gap: 10px; margin-right: auto; font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: -0.02em; }
+.nav-brand svg { width: 34px; height: 20px; }
+.nav-link { font-size: 14px; color: var(--text-secondary); transition: color .2s, opacity .4s var(--ease-out), visibility .4s; position: relative; }
+/* While the film plays the bar holds only the name and "Email": a section link would race the film
+   past in a second. The links (and the phone menu button) arrive once the film is done. */
+html.film-js .header.over-film :is(.nav-link, .nav-toggle) { opacity: 0; visibility: hidden; }
+.nav-link:hover, .nav-link[aria-current="page"] { color: var(--text-primary); }
+.nav-link[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: var(--signal); }
+.nav-toggle { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; background: transparent; border: 0; cursor: pointer; border-radius: 10px; transition: opacity .4s var(--ease-out), visibility .4s; }
 .nav-mobile { display: none; }
-
-/* ── Tables ───────────────────────────────────────────────────────────── */
-.table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.table th {
-  text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: color-mix(in srgb, var(--color-text) 60%, transparent);
-  padding: var(--space-2); border-bottom: 1px solid transparent;
-}
-.table td { padding: var(--space-2); border-bottom: 1px solid transparent; }
-.table thead tr {
-  background: linear-gradient(to right,
-    transparent, var(--color-divider) 48px,
-    var(--color-divider) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
-}
-.table tbody tr {
-  background: linear-gradient(to right,
-    transparent, color-mix(in srgb, var(--color-text) 8%, transparent) 48px,
-    color-mix(in srgb, var(--color-text) 8%, transparent) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   Page layout helpers — not part of the Nocturne system. Scaffolding for the
-   single-page portfolio, built on the tokens above.
-   ══════════════════════════════════════════════════════════════════════ */
-
-html { scroll-behavior: smooth; scroll-padding-top: 84px; }
-body { -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-a { text-decoration: none; }
-
-@keyframes noc-float { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-
-/* Section shell: centered 1120 column with fluid vertical + horizontal rhythm */
-.section {
-  max-width: 1120px; margin-inline: auto;
-  padding: clamp(56px, 9vw, 110px) clamp(20px, 5vw, 64px);
-}
-.section-band { background: var(--color-section); }
-.eyebrow { color: var(--color-accent); margin: 0 0 var(--space-3); }
-
-/* Card hover lift — the imported design's per-card hover shadow */
-.card-hover { transition: box-shadow .2s ease; }
-.card-hover:hover { box-shadow: var(--shadow-md); }
-
-/* About — a wide reading column beside a slim, sticky meta sidebar.
-   Equal columns leave the short meta card stranded next to long copy. */
-.about-grid { display: grid; grid-template-columns: 1fr; gap: clamp(32px, 5vw, 56px); align-items: start; }
-.about-meta { position: static; }
-@media (min-width: 880px) {
-  .about-grid { grid-template-columns: minmax(0, 1fr) clamp(300px, 34%, 400px); }
-  .about-meta { position: sticky; top: 96px; }
-}
-
-/* Secondary text on the indigo band — tinted from the accent hue, never gray. */
-.stat-band-label {
-  margin-top: var(--space-3);
-  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: color-mix(in srgb, var(--color-accent-100) 66%, var(--color-section));
-}
-
-/* Respect prefers-reduced-motion: strip entrance/transition motion everywhere.
-   Framer Motion honors it in JS too; this covers CSS transitions like card hover. */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-@media (max-width: 700px) {
-  [data-navlink] { display: none; }
-  .nav [data-navcta] { display: none; }
+@media (max-width: 1019px) { .nav { gap: 20px; } }
+@media (max-width: 760px) {
+  .nav { gap: 12px; }
+  /* The phone film sits behind the bar, and at the ownership hold the stone's tip reaches the bar's
+     middle (x 113 to 270 at 360 to 390px wide). The name stacks on two lines at the left edge, clear
+     of it; the mark comes back from 761px up. */
+  .nav-brand svg { display: none; }
+  .nav-brand span { width: min-content; line-height: 1.05; }
+  .nav-link, .nav .btn { display: none; }
   .nav-toggle { display: inline-flex; }
-  .nav { gap: var(--space-3); }
-  .nav a.btn { white-space: nowrap; }
-  a.btn { min-height: 44px; }
-  [data-social-row] { margin-left: 0 !important; width: 100%; }
-  .tag { font-size: 12px; }
-  .card-kicker { font-size: 11px; }
+  .nav-mobile { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s var(--ease-out); }
+  .nav-mobile-inner { overflow: hidden; min-height: 0; display: flex; flex-direction: column; gap: 4px; padding-inline: var(--gutter); background: rgba(7, 13, 22, 0.92); backdrop-filter: blur(14px); }
+  .nav-mobile-inner a:not(.btn) { display: flex; align-items: center; min-height: 48px; font-size: 17px; border-bottom: 1px solid var(--line); }
+  .nav-mobile-inner .btn { margin-block: 12px 20px; }
+  .nav-mobile.open { grid-template-rows: 1fr; }
+}
 
-  .nav-mobile {
-    display: grid; grid-template-rows: 0fr;
-    position: absolute; top: 100%; left: 0; right: 0;
-    transition: grid-template-rows 0.3s ease;
-  }
-  .nav-mobile-inner {
-    overflow: hidden; min-height: 0;
-    display: flex; flex-direction: column;
-    background: var(--color-bg); border-bottom: 1px solid var(--color-divider);
-    padding: var(--space-2) max(clamp(20px,5vw,64px), env(safe-area-inset-right))
-             var(--space-6) max(clamp(20px,5vw,64px), env(safe-area-inset-left));
-  }
-  .nav-mobile a:not(.btn) {
-    display: flex; align-items: center; min-height: 48px; font-size: 16px;
-    color: var(--color-text); text-decoration: none;
-    border-bottom: 1px solid var(--color-divider);
-  }
-  .nav-mobile a[aria-current='page'] { color: var(--color-accent); }
-  .nav-mobile .btn { margin-top: var(--space-4); }
+/* ── The film: one pinned stage, the film full-bleed ──────────────────────
+   The stage is the film's scroll plus one screen, so the layer inside stays
+   pinned for exactly the film's scroll. The film's own edge colour sits behind
+   it, so the frame never shows a border. */
+.film {
+  position: relative; z-index: 1;
+  height: calc(var(--film-screens, 16) * 100vh);
+  height: calc(var(--film-screens, 16) * 100svh);
+  background: var(--film-edge);
 }
-@media (max-width: 400px) {
-  a.btn { width: 100%; justify-content: center; }
-  .nav a.btn { width: auto; }
-  [data-social-row] a.btn { width: auto; flex: 1; }
+/* Two layouts on one grid. Stacked, the default: the film fills the top row,
+   as large as the space above the words allows, and the words sit under it on
+   the page colour. Side by side (the query below): the film covers the layer
+   and the words sit left of the stone. */
+.film-layer {
+  position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; container-type: size;
+  display: grid; grid-template-rows: minmax(0, 1fr) auto;
 }
-@media (hover: none) {
-  .nav a:not(.btn) { min-height: 44px; display: inline-flex; align-items: center; }
-  a.btn { min-height: 44px; }
+/* Stacked (this default; the side and phone queries below reset it): the film box starts at the
+   header's bottom edge, so the stone and the rocks never pass under its words. The layer's
+   padding is the header's height, not a gap between things. In the break rocks leave through
+   the box's top edge, which now shows, so the break fade below melts it as it does the bottom. */
+html.film-js .film-layer { padding-top: var(--header-h); --film-top-break: linear-gradient(to bottom, var(--film-edge), transparent 15%); }
+/* With the loop running the layer is fixed, not sticky: once the film has played, the crystal stays behind every
+   section (main and the footer ride over it, see below) instead of scrolling away with the stage. The stage keeps
+   its height, so the header and the playhead still know where it ends. Its own fill is the edge colour, so
+   nothing behind it shows where the stacked film leaves room. */
+html.film-js .film-layer { position: fixed; left: 0; right: 0; background: var(--film-edge); }
+.film-video, .film-poster, .film-layer::before, .film-layer::after {
+  position: absolute; grid-area: 1 / 1 / 2 / 2; top: 0; left: 50%; transform: translateX(-50%);
+  height: 100%; width: auto; aspect-ratio: 16 / 9; max-width: none;
 }
+.film-video, .film-poster { object-fit: cover; }
+.film-layer > picture { display: contents; } /* the poster is laid out as a grid item */
+/* The stacked film shows its bottom edge, and its sides when it is narrower than
+   the layer; rocks cross them in the break. A static overlay in the edge colour
+   melts them, inside the film's dark margins only: while any caption shows, the
+   lit stone ends 42 film px (3.9%) above the bottom and 615 px (32%) in from
+   either side (desktop.mp4). A mask on the video would re-composite every frame. */
+.film-layer::after {
+  content: ""; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(to top, var(--film-edge), transparent 3.5%),
+    linear-gradient(to right, var(--film-edge), transparent 6%, transparent 94%, var(--film-edge));
+}
+/* In the break no caption shows, and the rocks leaving through the bottom edge
+   (and, stacked, the top one) would still show a cut: a taller fade (15%, clear of
+   the crystal, whose lit pixels end at 942 of 1080) comes in for it. film-stage.tsx
+   sets in-break. */
+.film-layer::before {
+  content: ""; z-index: 1; pointer-events: none;
+  background: linear-gradient(to top, var(--film-edge), transparent 15%), var(--film-top-break, none);
+  opacity: 0; transition: opacity .5s var(--ease-out);
+}
+.film.in-break .film-layer::before { opacity: 1; }
+/* The poster covers the video until its first seek lands. */
+.film-poster { transition: opacity .4s var(--ease-out); }
+.film.is-live .film-poster { opacity: 0; }
+
+/* Captions share one grid cell, under the film, centred. */
+.film-captions {
+  grid-area: 2 / 1; position: relative; z-index: 2;
+  display: grid; align-items: start; justify-items: center;
+  padding: 0 var(--gutter) clamp(16px, 4cqh, 40px);
+  pointer-events: none;
+}
+.film-caption {
+  grid-area: 1 / 1; position: relative; isolation: isolate;
+  max-width: min(440px, 100%); /* stacked: as wide as its words, so the block centres under the stone */
+  display: flex; flex-direction: column; align-items: flex-start; gap: 18px;
+  text-shadow: var(--tshadow);
+  will-change: opacity, transform;
+}
+
+/* Side by side, when the words fit beside the stone with the film covering the
+   layer. --s is screen px per film px (cq units: the layer, scrollbar excluded).
+   The stone's left edge reaches 355.2 film px (0.185 of the width) left of centre
+   over the holds, so the box ends 32px before it. That fits a 280px box when
+   width >= 752px + 0.66 x height, a line media queries cannot test; each corner
+   below sits inside it. Everywhere else the words stack under the stone. */
+@media (min-aspect-ratio: 16/9) and (min-width: 1200px), (min-aspect-ratio: 16/10) and (min-width: 1280px), (min-aspect-ratio: 3/2) and (min-width: 1340px) {
+  .film-video, .film-poster, .film-caption { --s: max(100cqw / 1920, 100cqh / 1080); }
+  .film-video, .film-poster {
+    top: 50%; transform: translate(-50%, -50%);
+    width: calc(1920 * var(--s)); height: calc(1080 * var(--s));
+  }
+  html.film-js .film-layer { padding-top: 0; }
+  .film-layer::before { content: none; }
+  /* The last frame ends a few levels bluer-black than the edge colour the page carries on in;
+     one thin strip at the layer's bottom melts that step. (With film-js only: the no-JS
+     stack keeps its own overlay.) */
+  html.film-js .film-layer::after {
+    top: auto; bottom: 0; left: 0; transform: none; width: 100%; height: 3.5%;
+    background: linear-gradient(to top, var(--film-edge), transparent);
+  }
+  .film-captions { grid-area: 1 / 1; align-items: center; justify-items: start; padding: 0 var(--gutter); }
+  .film-caption { width: min(440px, 50cqw - 355.2 * var(--s) - 32px - var(--gutter)); }
+  /* The scrim: a soft pool behind the words only, in the film's edge colour
+     (#070b16), transparent before its own edge. No overlay, no one-sided wash. */
+  .film-caption::before {
+    content: ""; position: absolute; inset: -64px -96px; z-index: -1;
+    background: radial-gradient(closest-side, rgb(7 11 22 / .88), rgb(7 11 22 / .58) 50%, rgb(7 11 22 / 0) 90%);
+  }
+}
+/* Phones and tall windows (the same query picks phone.mp4 in film-stage.tsx, once,
+   at load): stacked, with the film's row fixed at the top 60% of the screen, behind
+   the header. phone.mp4 is a 720x578 centre crop, so at the row's full height only
+   its dark sides fall off screen: the stone stays whole, 41% (the crystal) to 54%
+   of the screen high at the hold middles. The stacked edge fades above melt its
+   bottom edge (Ruling 5); its side fades land off screen. */
+@media (max-width: 760px), (max-aspect-ratio: 4/5) {
+  html.film-js .film-layer { padding-top: 0; --film-top-break: none; }
+  .film-layer { grid-template-rows: minmax(0, 60%) auto; }
+  .film-video, .film-poster, .film-layer::before, .film-layer::after { aspect-ratio: 720 / 578; }
+}
+/* Once film-stage.tsx has picked the film (once, at load: data-src), the film box
+   follows the loaded file instead of the live query, so a rotated tablet keeps its
+   stone whole: phone.mp4 in a desktop layout stays a narrow full-height box with
+   its edges melted; desktop.mp4 in the phone row only loses its dark sides (the
+   stone is its centre 36%). Without data-src (before the script runs, JavaScript
+   off, reduced motion) the query above decides, as it does for <picture>. Side by
+   side sizes the box to 16:9 itself, so phone.mp4 is drawn whole (contain) there. */
+.film[data-src="desktop"] .film-video, .film[data-src="desktop"] .film-poster,
+.film[data-src="desktop"] .film-layer::before, .film[data-src="desktop"] .film-layer::after { aspect-ratio: 16 / 9; }
+.film[data-src="phone"] .film-video, .film[data-src="phone"] .film-poster,
+.film[data-src="phone"] .film-layer::before, .film[data-src="phone"] .film-layer::after { aspect-ratio: 720 / 578; }
+.film[data-src="phone"] .film-video, .film[data-src="phone"] .film-poster { object-fit: contain; }
+.film-caption:not([inert]) a { pointer-events: auto; }
+/* With JavaScript the loop owns opacity; until it runs, only the opening caption shows. */
+html.film-js .film-caption:not(:first-child) { opacity: 0; }
+/* No loop (JavaScript off, or reduced motion: layout.tsx sets film-js only when
+   motion is allowed): not pinned. One still in a row 60% of the screen high (the
+   poster, or the end frame under reduced motion), and every caption under it, in
+   order. Overrides the side-by-side rules too. */
+html:not(.film-js) .film { height: auto; }
+html:not(.film-js) .film-layer { position: relative; height: auto; container-type: normal; grid-template-rows: 60svh auto; }
+html:not(.film-js) .film-video, html:not(.film-js) .film-layer::before { display: none; }
+html:not(.film-js) .film-poster { top: 0; transform: translateX(-50%); width: auto; height: 100%; }
+html:not(.film-js) .film-layer::after { content: ""; }
+/* One width for every caption, so their left edges line up. The bottom padding
+   is the room before the next section: there is no flex parent to gap against. */
+html:not(.film-js) .film-captions { grid-area: 2 / 1; display: flex; flex-direction: column; align-items: center; gap: 72px; padding: 0 var(--gutter) 96px; pointer-events: auto; }
+html:not(.film-js) .film-caption { width: min(440px, 100%); }
+html:not(.film-js) .film-caption::before { content: none; }
+
+.film-title { text-wrap: balance; }
+.film-title span, .film-caption .eyebrow span { display: inline-block; }
+.film-title-name { font-size: clamp(40px, 3.9vw, 60px); line-height: .96; letter-spacing: -0.045em; }
+.film-title-line { font-size: clamp(26px, 2.25vw, 36px); line-height: 1.08; letter-spacing: -0.03em; }
+.film-line { font-size: clamp(16px, 1.2vw, 19px); line-height: 1.5; text-wrap: pretty; }
+/* The smallest phones: the captions share one row, sized by the tallest (the intro, whose role
+   line and name each take two lines here). Tighter spacing keeps that row under 40% of the
+   screen, so the crystal stays above 38% of it. */
+@media (max-width: 360px) { .film-caption { gap: 12px; } }
+.film-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ── Sections ─────────────────────────────────────────────────────────── */
+main { position: relative; z-index: 1; }
+/* JavaScript off: under the film, its edge colour at the top, clearing over one screen. The page's glow (.env,
+   fixed to the viewport) comes back gradually below the film's bottom edge, never as a hard step. */
+.film + main {
+  background: linear-gradient(to bottom, var(--film-edge), transparent 100vh);
+  background: linear-gradient(to bottom, var(--film-edge), transparent 100svh);
+}
+/* With JavaScript the crystal stays behind the sections (the fixed film layer, or under reduced motion the end
+   still in .env). main carries the dim, so the words and the dim always move together and the contrast never
+   depends on where the crystal is. With the film, main starts clear, so the crystal goes on as it was, and the
+   dim comes in over the intro's top padding, before its first word. Under reduced motion the stage above is
+   solid, so main starts solid and clears to the dim over one screen. The footer keeps the dim too. */
+html.film-js .film + main { background: linear-gradient(to bottom, rgb(7 11 22 / 0), var(--dim) clamp(72px, 10vw, 140px)); }
+html.js:not(.film-js) .film + main {
+  background: linear-gradient(to bottom, var(--film-edge), var(--dim) 100vh);
+  background: linear-gradient(to bottom, var(--film-edge), var(--dim) 100svh);
+}
+html.js .film ~ .footer { background: var(--dim); }
+.section { position: relative; padding-block: clamp(72px, 10vw, 140px); }
+.section-inner { max-width: var(--measure); margin-inline: auto; padding-inline: var(--gutter); display: flex; flex-direction: column; gap: clamp(32px, 4vw, 56px); }
+.section-head { display: flex; flex-direction: column; gap: 14px; }
+.section-head h2 { font-size: clamp(34px, 5vw, 64px); max-width: 16ch; }
+
+/* Lines rising out of a blur (scroll-reveal.tsx writes their opacity, transform and filter as the page scrolls).
+   A line holding keyboard focus always shows, wherever the scroll is. */
+.reveal > :focus-within { opacity: 1 !important; transform: none !important; filter: none !important; }
+
+/* ── Intro and the number strip, right after the film ─────────────────── */
+.intro-text { font-family: var(--font-display); font-weight: 600; font-variant-numeric: lining-nums; font-size: clamp(21px, 2.3vw, 30px); line-height: 1.36; letter-spacing: -0.02em; max-width: 44ch; text-wrap: pretty; }
+.intro-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+/* The strip follows the intro: the intro's bottom padding is the room between them. */
+.proof-section { padding-top: 0; }
+.proof { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(24px, 4vw, 48px); }
+.proof > li { display: flex; }
+.proof-item { flex: 1; display: flex; flex-direction: column; gap: 10px; padding-left: 18px; border-left: 1px solid var(--line-strong); position: relative; transition: border-color .2s; }
+.proof-item::before { content: ""; position: absolute; left: -3px; top: 6px; width: 5px; height: 5px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 12px var(--signal); }
+.proof-item:hover { border-left-color: var(--signal); }
+.proof-num { font-family: var(--font-display); font-weight: 700; font-size: clamp(40px, 5.4vw, 68px); letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.proof-num small { font-size: .45em; color: var(--signal); letter-spacing: 0; }
+/* "under" sits on its own line above "5 min", which never splits. */
+.proof-num:not(.proof-num-words) { white-space: nowrap; }
+.proof-prefix { display: block; }
+.proof-num-words { font-size: clamp(24px, 2.4vw, 32px); line-height: 1.1; letter-spacing: -0.02em; text-wrap: balance; }
+.proof-label { font-family: var(--font-code); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); transition: color .2s; }
+.proof-item:hover .proof-label { color: var(--text-primary); }
+@media (max-width: 1019px) { .proof { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ── Tags: stack names in the code font ──────────────────────────────── */
+.tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-family: var(--font-code); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; border: 1px solid var(--line-strong); color: var(--text-secondary); }
+
+/* ── Selected work: three case cards, and the case pages ──────────────────
+   Plain markup, readable with JavaScript off; with it, each card rises in whole (selected-work.tsx). */
+.cases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.case-card {
+  position: relative; display: flex; flex-direction: column; gap: 22px; padding: 26px; border-radius: 20px;
+  background: rgb(13 23 38 / .6); border: 1px solid var(--line); /* --panel at 60%: the crystal glows through, faintly */
+}
+.case-card:hover { border-color: var(--line-strong); }
+.case-slot { display: flex; } /* the reveal around each card: the card fills its grid cell */
+.case-slot > .case-card { flex: 1; min-width: 0; }
+.case-card:has(.case-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.case-card h3 { font-size: clamp(23px, 2.1vw, 28px); line-height: 1.08; letter-spacing: -0.025em; text-wrap: balance; }
+.case-summary { flex: 1; color: var(--text-secondary); }
+/* One link, stretched over the whole card: the target is the card, not just the words. */
+.case-link {
+  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+  font-family: var(--font-code); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--signal);
+}
+.case-link:focus-visible { outline: none; }
+.case-link::after { content: ""; position: absolute; inset: 0; border-radius: 20px; }
+.case-card:hover .case-link { color: var(--text-primary); }
+
+/* The fact row: company, role, year, stack, result. A short list on a card, a wrapped row on a case page. */
+.facts { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.facts > div { display: grid; grid-template-columns: 7ch minmax(0, 1fr); gap: 14px; align-items: baseline; }
+.facts dt { font-family: var(--font-code); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-secondary); }
+.facts dd { margin: 0; font-size: 15px; line-height: 1.4; }
+.facts-stack { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.facts-stack .tag { color: var(--text-secondary); }
+
+.case-page { padding: clamp(112px, 14vw, 168px) var(--gutter) clamp(72px, 9vw, 128px); }
+.case { max-width: 920px; margin-inline: auto; display: flex; flex-direction: column; align-items: flex-start; gap: clamp(36px, 5vw, 64px); }
+@media (pointer: coarse) { .case-back, .case-link, .text-link { min-height: 44px; } }
+.case-head { display: flex; flex-direction: column; gap: 28px; width: 100%; }
+.case-head h1 { font-size: clamp(34px, 5.2vw, 62px); max-width: 20ch; text-wrap: balance; }
+.case-head .facts { flex-direction: row; flex-wrap: wrap; gap: 16px 36px; }
+.case-head .facts > div { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.case-head .facts > div:nth-child(n+4) { flex-basis: 100%; }
+.case-head .facts dd { font-size: 16px; }
+.case-body { display: flex; flex-direction: column; gap: clamp(36px, 4.5vw, 56px); width: 100%; }
+.case-block { display: grid; grid-template-columns: minmax(0, 210px) minmax(0, 1fr); gap: 12px clamp(24px, 4vw, 56px); align-items: start; }
+.case-block h2 { font-size: 22px; line-height: 1.15; letter-spacing: -0.02em; color: var(--signal); }
+.case-block p, .case-block li { font-size: 18px; line-height: 1.6; color: var(--text-secondary); max-width: 62ch; }
+.case-block ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.case-block li { position: relative; padding-left: 22px; }
+.case-block li::before { content: ""; position: absolute; left: 0; top: 0.8em; width: 6px; height: 6px; transform: translateY(-50%); border-radius: 50%; background: var(--signal); }
+.case-result p { font-size: clamp(20px, 2.2vw, 24px); line-height: 1.45; color: var(--text-primary); }
+.case-figure {
+  margin: 0; width: 100%; display: flex; justify-content: center; padding: clamp(20px, 4vw, 40px);
+  border-radius: 20px; background: var(--panel); border: 1px solid var(--line);
+}
+
+/* The drawings (case-diagram.tsx): thin ice-blue lines and nodes, labels in the code font. */
+.case-diagram { width: 100%; height: auto; overflow: visible; }
+.cd-box { fill: rgba(143, 211, 255, 0.06); stroke: var(--signal-soft); stroke-width: 1.5; }
+.cd-box-strong { fill: rgba(143, 211, 255, 0.14); stroke: var(--signal); }
+.cd-text { fill: var(--text-primary); font-family: var(--font-code); font-size: 16px; }
+.case-diagram-path, .cd-head, .cd-quiet, .cd-tick { fill: none; stroke: var(--signal); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.cd-quiet { stroke: var(--signal-soft); stroke-dasharray: 4 6; }
+.cd-notch { fill: var(--line-strong); }
+.cd-tick-ring { fill: rgba(143, 211, 255, 0.14); stroke: var(--signal); stroke-width: 1.5; }
+.cd-tick { stroke-width: 2; }
+
+@media (max-width: 1019px) { .cases { grid-template-columns: 1fr; } }
+@media (max-width: 759px) {
+  .case-block { grid-template-columns: 1fr; }
+  .case-block p, .case-block li { font-size: 17px; }
+  /* Narrow side padding: the drawing's labels need the width to stay near 11px. */
+  .case-figure { padding: 16px 8px; }
+}
+
+/* ── Experience: a dated timeline ─────────────────────────────────────────
+   Three columns on wide screens (dates, the rail, the role), two on phones (the rail, then the
+   dates over the role). The line grows with the scroll and each dot lights as it reaches it (experience.tsx);
+   at rest (JavaScript off, reduced motion) the line is whole and every dot lit. */
+.timeline {
+  --tl-date: 11rem; --tl-rail: 40px; --tl-cols: var(--tl-date) var(--tl-rail) minmax(0, 1fr);
+  position: relative; max-width: 900px;
+}
+.timeline-line {
+  position: absolute; top: 0; bottom: 0; left: calc(var(--tl-date) + var(--tl-rail) / 2 - 0.5px); width: 1px;
+  background: linear-gradient(to bottom, var(--signal), var(--line-strong) 30%, var(--line) 85%, transparent);
+  transform-origin: top;
+}
+.timeline-groups, .timeline-roles, .timeline-tags { list-style: none; margin: 0; padding: 0; }
+.timeline-groups { display: flex; flex-direction: column; gap: clamp(44px, 5vw, 60px); }
+.timeline-group { display: grid; grid-template-columns: var(--tl-cols); row-gap: 24px; }
+.timeline-company { grid-column: 3; font-size: clamp(22px, 2.2vw, 28px); letter-spacing: -0.02em; color: var(--signal); }
+.timeline-roles { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 36px; }
+/* Baselines line up: the dates with the role title, and the dot sits on that baseline like a bullet. */
+.timeline-role { display: grid; grid-template-columns: var(--tl-cols); align-items: baseline; }
+.timeline-when { font-family: var(--font-code); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); }
+.timeline-dot {
+  justify-self: center; width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--signal-soft);
+  background: color-mix(in srgb, var(--signal) 45%, var(--canvas)); transition: background-color .3s var(--ease-out), box-shadow .3s var(--ease-out);
+}
+.timeline-group:first-child .timeline-role:first-child .timeline-dot { background: var(--signal); box-shadow: 0 0 14px var(--signal); }
+/* Not reached yet: a hollow ring (no fill, so no dark disc over the crystal; the line has not got there either). */
+.timeline .timeline-dot.is-off { background: transparent; box-shadow: none; }
+.timeline-body { display: flex; flex-direction: column; gap: 8px; }
+.timeline-title { font-size: clamp(19px, 1.7vw, 22px); line-height: 1.2; letter-spacing: -0.015em; }
+.timeline-co { color: var(--signal); font-weight: 500; }
+.timeline-text { color: var(--text-secondary); max-width: 60ch; }
+.timeline-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+@media (max-width: 759px) {
+  .timeline { --tl-rail: 28px; --tl-cols: var(--tl-rail) minmax(0, 1fr); }
+  .timeline-line { left: calc(var(--tl-rail) / 2 - 0.5px); }
+  .timeline-company { grid-column: 2; }
+  .timeline-role { row-gap: 8px; }
+  .timeline-when { grid-area: 1 / 2; }
+  .timeline-dot { grid-area: 1 / 1; }
+  .timeline-body { grid-column: 2; }
+}
+
+/* ── Projects, About, Contact ─────────────────────────────────────────── */
+.projects { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.project {
+  display: grid; grid-template-columns: minmax(0, 13rem) minmax(0, 1fr) auto; gap: 12px clamp(24px, 4vw, 56px); align-items: baseline;
+  padding-block: 28px; border-bottom: 1px solid var(--line);
+}
+.project h3 { font-size: clamp(22px, 2.2vw, 28px); letter-spacing: -0.02em; }
+.project p { color: var(--text-secondary); max-width: 60ch; }
+.project .text-link { align-self: baseline; }
+@media (max-width: 759px) { .project { grid-template-columns: minmax(0, 1fr); } .project .text-link { justify-self: start; } }
+
+.about { display: flex; flex-direction: column; gap: 14px; }
+.about p { font-size: clamp(18px, 1.6vw, 21px); line-height: 1.55; color: var(--text-secondary); text-wrap: pretty; }
+.about p:first-child { color: var(--text-primary); }
+
+.contact { display: flex; flex-direction: column; align-items: flex-start; gap: 28px; }
+.contact-email {
+  font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 5.6vw, 52px); line-height: 1.1; letter-spacing: -0.03em;
+  overflow-wrap: anywhere; max-width: 100%;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .18em; text-decoration-color: var(--line-strong);
+  transition: color .2s, text-decoration-color .2s;
+}
+.contact-email:hover { color: var(--signal); text-decoration-color: var(--signal); }
+.contact-links { display: flex; flex-wrap: wrap; gap: 12px; }
+.contact-note { color: var(--text-secondary); }
+
+
+/* ── Footer ───────────────────────────────────────────────────────────── */
+.footer { position: relative; z-index: 1; border-top: 1px solid var(--line); }
+.footer-inner { max-width: var(--measure); margin-inline: auto; padding: 28px var(--gutter); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; font-family: var(--font-code); font-size: 12px; letter-spacing: .06em; color: var(--text-faint); }
+.footer-inner svg { width: 34px; height: 20px; color: var(--signal); }
+
+/* ── Whisper-level life, one per section, paused off-tab ──────────────── */
+body.paused *, body.paused *::before, body.paused *::after { animation-play-state: paused !important; }
+
+/* ── Reduced motion: final states, no drives ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; transition-delay: 0s !important; scroll-behavior: auto !important; }
+}
+
+

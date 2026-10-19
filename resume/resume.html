@@ -1,0 +1,133 @@
+<!doctype html>
+<!--
+  Résumé source. Served at /my-cv.pdf. Rebuild after any edit, from the repo root:
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --no-pdf-header-footer \
+    --virtual-time-budget=8000 --print-to-pdf=public/my-cv.pdf resume/resume.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aminat Moldalieva · Résumé</title>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&display=block" rel="stylesheet">
+<style>
+  @page { size: letter; margin: 0.38in 0.55in; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Carlito, Calibri, sans-serif; font-size: 9.4pt; line-height: 1.22; color: #111; display: flex; flex-direction: column; gap: 7pt; }
+  a { color: inherit; text-decoration: none; }
+  header { display: flex; flex-direction: column; align-items: center; gap: 2pt; }
+  h1 { font-size: 21pt; font-weight: 700; line-height: 1.1; }
+  .role, .contact { color: #444; font-size: 9pt; }
+  section { display: flex; flex-direction: column; gap: 4pt; }
+  h2 { font-size: 9pt; font-weight: 700; letter-spacing: 0.04em; padding-bottom: 2pt; border-bottom: 0.75pt solid #888; }
+  .entry { display: flex; flex-direction: column; gap: 1pt; }
+  .head { display: flex; justify-content: space-between; gap: 12pt; }
+  .head .when { color: #444; white-space: nowrap; }
+  ul { display: flex; flex-direction: column; gap: 0.5pt; padding-left: 15pt; }
+  li::marker { font-size: 8pt; }
+  .skills { display: flex; flex-direction: column; gap: 1pt; }
+  b { font-weight: 700; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Aminat Moldalieva</h1>
+    <p class="role">Software Engineer · Web &amp; Automation</p>
+    <p class="contact">Remote (EMEA) · moldalievaaminat@gmail.com · linkedin.com/in/aminatmoldalieva · github.com/Aminat00 · aminatmoldalieva.com</p>
+  </header>
+
+  <section>
+    <h2>SUMMARY</h2>
+    <p>Software engineer, 5 years with TypeScript across web, mobile and automation. At a crowdfunding platform used in 100+ countries I moved from QA automation to the mobile app to the web, where I now automate the processes behind it. I tend to own the parts next to the feature: test suites and monitoring, release pipelines, workflow automation. Comfortable across frontend (React, Next.js), backend (Node/NestJS) and CI, and I use AI coding tools heavily enough that work which used to take weeks lands in days.</p>
+  </section>
+
+  <section>
+    <h2>EXPERIENCE</h2>
+    <div class="entry">
+      <div class="head"><span><b>Software Engineer</b> — LaunchGood</span><span class="when">Jul 2026 – Present · Remote, US</span></div>
+      <ul>
+        <li>Automated a manual, multi-department approval process end to end: one n8n workflow connects the website to payment, CRM and task-management tools. Turnaround went from days to minutes.</li>
+        <li>Building analytics views on the campaign creator side that give fundraisers a clear picture of their results.</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="head"><span><b>Mobile Software Engineer</b> — LaunchGood</span><span class="when">Aug 2025 – Jul 2026 · Remote, US</span></div>
+      <ul>
+        <li>Rebuilt core screens of a React Native app serving 100+ countries as part of an app-wide facelift, shipping each feature end to end across API integration, state, UI and Jest component tests.</li>
+        <li>Brought Claude into the team's workflow via MCP for design handoff and test authoring.</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="head"><span><b>QA Automation Engineer</b> — LaunchGood</span><span class="when">Feb 2025 – Aug 2025 · Remote, US</span></div>
+      <ul>
+        <li>Built the company's first Playwright end-to-end suite from scratch, with reusable page-object helpers other engineers extended.</li>
+        <li>Put it on a five-minute GitHub Actions cron as synthetic monitoring, with Slack webhook alerts on failure.</li>
+        <li>Brought detection of production breakages down from hours to under five minutes.</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="head"><span><b>Full-Stack Mobile Engineer</b> — Freelance</span><span class="when">Aug 2024 – Feb 2025 · Remote</span></div>
+      <ul>
+        <li>Developed a mobile app integrated with the OpenAI API for AI-driven user features.</li>
+        <li>Built a full-stack web platform with Next.js, Supabase, tRPC and Prisma, and an e-commerce site on the Shopify Headless Storefront API.</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="head"><span><b>Full-Stack Mobile Engineer</b> — Aurem</span><span class="when">Dec 2022 – Aug 2024 · Abu Dhabi, UAE</span></div>
+      <ul>
+        <li>Migrated the frontend from Chakra UI to Tailwind CSS, cutting styling time by 30% and standardizing the component layer.</li>
+        <li>Automated Expo builds with GitHub Actions, saving 7 hours of manual release effort weekly.</li>
+        <li>Designed and implemented NestJS backend APIs (data models, entities and queries) behind the app's core flows.</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="head"><span><b>Frontend Engineer</b> — HCL Technologies</span><span class="when">Jan 2022 – Dec 2022 · Warsaw, Poland</span></div>
+      <ul>
+        <li>Built micro-frontends with Single-SPA for the "My Account" area of a platform serving 2M+ users, working inside a shared shell across multiple teams; started a recurring peer knowledge-sharing session for the frontend team.</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="head"><span><b>Full-Stack Engineer Intern</b> — proceedit</span><span class="when">Jul 2021 – Jan 2022 · Barcelona, Spain</span></div>
+      <ul>
+        <li>Migrated the company site from WordPress to AWS and built a Flutter web front end for cross-platform reach.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>PROJECTS</h2>
+    <div class="entry">
+      <div class="head"><span><b>Nidham</b> (نظام) — agentic mobile planner for Muslims with ADHD</span><span class="when">2026</span></div>
+      <ul>
+        <li>Built the MVP end to end in 48 hours: a React Native + Expo (TypeScript) client with Supabase auth and sync, and an n8n backend routing each plain-language brain-dump through three agents (capture, Tavily-backed research, and a scheduler that works around the five daily prayer times).</li>
+        <li>Kept the planning logic in the workflow, so agent changes ship without an app release. Case study: try.ka.nz/ai/aminatmoldalieva</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="head"><span><b>AI Interview Coach</b> — real-time avatar interviewer (prototype)</span><span class="when">2026</span></div>
+      <ul>
+        <li>Prototyped a voice-driven mock interviewer: configured an ElevenLabs conversational agent and wired it to a HeyGen LiveAvatar over LiveKit, so the agent's audio drives a lip-synced video interviewer that answers in real time.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>SKILLS</h2>
+    <div class="skills">
+      <p><b>Frontend:</b> TypeScript, JavaScript, React, Next.js, Tailwind CSS, Single-SPA</p>
+      <p><b>Backend:</b> Node.js, NestJS, tRPC, Prisma, Supabase, REST APIs, SQL</p>
+      <p><b>Automation:</b> n8n workflows, webhooks, third-party API integrations (payments, CRM, task management)</p>
+      <p><b>AI &amp; Agents:</b> LLM APIs (Claude, OpenAI), Model Context Protocol (MCP), multi-agent routing, system prompt design, ElevenLabs conversational agents, HeyGen LiveAvatar / LiveKit, AI coding agents (Claude Code)</p>
+      <p><b>Mobile:</b> React Native, Expo, Flutter</p>
+      <p><b>Testing &amp; CI:</b> Playwright, Jest, GitHub Actions, synthetic monitoring, AWS</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>EDUCATION</h2>
+    <div class="skills">
+      <p><b>B.Eng., Computer Engineering</b> — Vistula University, Warsaw, Poland</p>
+      <p><b>Languages:</b> English, Russian, Kyrgyz, Turkish, Polish</p>
+    </div>
+  </section>
+</body>
+</html>

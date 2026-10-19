@@ -53,6 +53,9 @@
 /* ── Base ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 html { overflow-x: hidden; overflow-x: clip; scroll-behavior: smooth; scroll-padding-top: 88px; }
+/* No visible scrollbars anywhere, page or inner boxes; scrolling itself works as before. */
+* { scrollbar-width: none; }
+::-webkit-scrollbar { display: none; }
 body {
   margin: 0; overflow-x: hidden; overflow-x: clip;
   background: var(--canvas); color: var(--text-primary);
